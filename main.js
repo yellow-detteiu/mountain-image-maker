@@ -5,12 +5,14 @@ let pixel_height;
 let input;
 let save_button;
 let colorPicker;
+let rotation_slider;
+let hight_slider;
 
 function setup() {
   canvas = createCanvas(1000, 1000, WEBGL);
   pg = createGraphics(256, 256);
   canvas.drop(gotFile); // ドラッグ＆ドロップされた画像を取得
-  frameRate(1); // randomで色がチカチカしすぎないよう、アニメーションの速度を下げる
+  frameRate(1); // randomでチカチカしすぎないよう、アニメーションの速度を下げる
 
   pixelDensity(1); // 解像度を変えたい場合は、ここをいじる
   pg.background(0);
@@ -56,14 +58,8 @@ function setup() {
   textSize(width / 25);
   textAlign(CENTER, CENTER);
   fill(255);
-  text("好きな画像をドラッグ＆ドロップしてネ☆彡", width / 2, height / 4);
-  text("画像を保存したいときはクリックしてネ☆彡", width / 2, height / 3);
-
-  // z座標用の値を容易しておく
-  // for (let i = 0; i < 1000; i++) {
-  //   z.push(random(-20, 20));
-  // }
-  // console.log(z);
+  pg.text("画像の選択、保存はボタンで", width / 2, height / 4);
+  pg.text("線の幅、色、画像の向き、山の高さなどはスライドで調節", width / 2, height / 3);
 }
 
 function draw() {
@@ -91,11 +87,6 @@ function draw() {
       let rotation = rotation_slider.value();
       let mountain_hight = hight_slider.value();
 
-
-      // 画像を描画
-      //image(img, -width / 2, -height / 2);
-
-      //blendMode(ADD);
       //stroke(line_color);
       strokeWeight(line_width);
 
@@ -115,6 +106,7 @@ function draw() {
         beginShape(TRIANGLE_STRIP);
         let yoff = 0;
         for (let x = 0; x < cols; x++) {
+          // 線の色
           let r =
             red(line_color) +
             map(noise(x * step * pix_x, y * step * pix_y), 0, 1, -50, 50);
@@ -124,7 +116,9 @@ function draw() {
           let b =
             blue(line_color) +
             map(noise(x * step * pix_x, y * step * pix_y), 0, 1, -50, 50);
+          
           stroke(r,g,b);
+          
           fill(img.get(x * step * pix_x, y * step * pix_y));
 
           let xoff = 0;
